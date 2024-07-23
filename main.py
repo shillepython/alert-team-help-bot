@@ -63,7 +63,7 @@ async def set_card(message: types.Message):
         if len(args) == 3:
             card_name, card, bank_name = args
             async with aiosqlite.connect('cards.db') as db:
-                await db.execute('INSERT INTO cards (card_name, card, bank_name) VALUES (?, ?)', (card_name, card, bank_name))
+                await db.execute('INSERT INTO cards (card_name, card, bank_name) VALUES (?, ?, ?)', (card_name, card, bank_name))
                 await db.commit()
             await message.reply(f"Карта обновлена на: {card_name} - {card} - {bank_name}")
         else:
