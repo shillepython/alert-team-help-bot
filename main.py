@@ -44,7 +44,7 @@ async def get_card(message: types.Message):
                 card_name, card, bank_name = row
                 await message.reply(f'''💳 Карты для переводов
 
-🇷🇺`{card}`
+🇷🇺{card}
 ├ От 100
 ├ {card_name}
 └ {bank_name}
