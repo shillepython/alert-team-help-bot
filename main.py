@@ -59,7 +59,7 @@ async def get_card(message: types.Message):
 async def set_card(message: types.Message):
     user_id = message.from_user.id
     if user_id in ALLOWED_USER_IDS:
-        args = message.get_args().split(maxsplit=1)
+        args = message.get_args().split(maxsplit=2)
         if len(args) == 3:
             card_name, card, bank_name = args
             async with aiosqlite.connect('cards.db') as db:
