@@ -22,7 +22,7 @@ async def init_db():
                 id INTEGER PRIMARY KEY,
                 card TEXT NOT NULL,
                 card_name TEXT NOT NULL,
-                bank_name TEXT NOT NULL,
+                bank_name TEXT NOT NULL
             )
         ''')
         await db.commit()
