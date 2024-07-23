@@ -40,7 +40,7 @@ async def get_card(message: types.Message):
         async with db.execute('SELECT card FROM cards ORDER BY id DESC LIMIT 1') as cursor:
             row = await cursor.fetchone()
             current_card = row[0] if row else "Карта не установленна"
-    await message.reply(f"Текущая карта : `{current_card}`", parse_mode=types.ParseMode.MARKDOWN)
+    await message.reply(f'''{current_card}''', parse_mode=types.ParseMode.MARKDOWN)
 
 # Command to set a new card
 @dp.message_handler(commands=['setcard'])
