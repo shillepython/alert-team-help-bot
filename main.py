@@ -20,7 +20,9 @@ async def init_db():
         await db.execute('''
             CREATE TABLE IF NOT EXISTS cards (
                 id INTEGER PRIMARY KEY,
-                card TEXT NOT NULL
+                card TEXT NOT NULL,
+                card_name TEXT NOT NULL,
+                bank_name TEXT NOT NULL,
             )
         ''')
         await db.commit()
@@ -33,28 +35,39 @@ async def set_commands(bot: Bot):
     ]
     await bot.set_my_commands(commands)
 
-# Command to get the current card
 @dp.message_handler(commands=['card'])
 async def get_card(message: types.Message):
     async with aiosqlite.connect('cards.db') as db:
-        async with db.execute('SELECT card FROM cards ORDER BY id DESC LIMIT 1') as cursor:
+        async with db.execute('SELECT card_name, card, bank_name FROM cards ORDER BY id DESC LIMIT 1') as cursor:
             row = await cursor.fetchone()
-            current_card = row[0] if row else "Карта не установленна"
-    await message.reply(f'''{current_card}''', parse_mode=types.ParseMode.MARKDOWN)
+            if row:
+                card_name, card, bank_name = row
+                await message.reply(f'''💳 Карты для переводов
+
+                🇷🇺{card}
+                ├ От 100 до ∞
+                ├ {card_name}
+                └ {bank_name}
+
+                ⚠️ Осторожно, вам может написать фейк, актуальные реквизиты указаны исключительно в этом сообщении. Будьте внимательны и отправляйте чеки в лс @papa_payments''',
+                                    parse_mode=types.ParseMode.MARKDOWN)
+            else:
+                await message.reply("Карта не установленна")
 
 # Command to set a new card
 @dp.message_handler(commands=['setcard'])
 async def set_card(message: types.Message):
     user_id = message.from_user.id
     if user_id in ALLOWED_USER_IDS:
-        args = message.get_args()
-        if args:
+        args = message.get_args().split(maxsplit=1)
+        if len(args) == 3:
+            card_name, card, bank_name = args
             async with aiosqlite.connect('cards.db') as db:
-                await db.execute('INSERT INTO cards (card) VALUES (?)', (args,))
+                await db.execute('INSERT INTO cards (card_name, card, bank_name) VALUES (?, ?)', (card_name, card, bank_name))
                 await db.commit()
-            await message.reply(f"Карта обновлена на: {args}")
+            await message.reply(f"Карта обновлена на: {card_name} - {card} - {bank_name}")
         else:
-            await message.reply("Пожалуйста введите карту в таком формате. Используя: /setcard <new_card>")
+            await message.reply("Пожалуйста введите карту в таком формате. Используя: /setcard <card_name> <card> <bank_name>")
     else:
         await message.reply("У тебя нет прав чтобы это делать.")
 
