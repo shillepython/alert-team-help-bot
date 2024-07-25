@@ -5,7 +5,7 @@ from aiogram.utils import executor
 from aiogram.dispatcher.filters import Command
 import datetime
 
-API_TOKEN = '7243936484:AAFYXGgOcq9XPl1e65O_D26WJXPEKqkxW08'
+API_TOKEN = '7037813515:AAGOQxlALQBuNmOn3KxvM3r1q78Nd6D9Ews'
 
 # Initialize bot and dispatcher
 bot = Bot(token=API_TOKEN)
@@ -40,7 +40,7 @@ async def set_commands(bot: Bot):
     commands = [
         types.BotCommand(command="/card", description="Получить текущую карту"),
         types.BotCommand(command="/todayearnings", description="Показать заработанную сумму за сегодня"),
-        
+
         types.BotCommand(command="/setcard", description="Установить новую карту (Только для админа)"),
         types.BotCommand(command="/addearn", description="Добавить заработанную сумму (Только для админа)"),
         types.BotCommand(command="/removeearn", description="Отнять сумму от заработанного (Только для админа)")
