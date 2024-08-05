@@ -47,6 +47,11 @@ async def set_commands(bot: Bot):
     ]
     await bot.set_my_commands(commands)
 
+@dp.message_handler(content_types=types.ContentType.NEW_CHAT_MEMBERS)
+async def welcome_new_member(message: types.Message):
+    for new_member in message.new_chat_members:
+        await message.answer(f"Добро пожаловать, @{new_member.username}!")
+
 @dp.message_handler(commands=['card'])
 async def get_card(message: types.Message):
     async with aiosqlite.connect('cards.db') as db:
